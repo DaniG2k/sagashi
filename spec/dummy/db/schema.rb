@@ -11,6 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150820100152) do
+
+  create_table "sagashi_inverted_indices", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "token"
+  end
+
+  create_table "sagashi_tokens", force: :cascade do |t|
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.text     "doc_info"
+    t.integer  "inverted_index_id"
+  end
 
 end
