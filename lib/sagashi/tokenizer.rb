@@ -1,7 +1,6 @@
 module Sagashi
   # The same tokenizer should be used for document
-  # tokenization and query tokenization to ensure that
-  # the same terms are being searched and returned.
+  # tokenization and query tokenization
   class Tokenizer
     attr_accessor :str
     attr_reader :tokens
