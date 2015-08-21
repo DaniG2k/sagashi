@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820104920) do
+ActiveRecord::Schema.define(version: 20150821111755) do
 
   create_table "sagashi_tokens", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text     "doc_info"
     t.string   "term"
+    t.integer  "doc_freq"
   end
 
 end
