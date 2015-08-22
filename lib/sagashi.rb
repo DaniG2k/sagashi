@@ -1,4 +1,4 @@
-require "sagashi/engine"
+require 'sagashi/engine'
 require 'sagashi/query_parser'
 require 'sagashi/document'
 require 'sagashi/collection'
@@ -6,8 +6,9 @@ require 'sagashi/tokenizer'
 require 'sagashi/ranker'
 require 'sagashi/inverted_index'
 require 'sagashi/spelling_suggester'
-require 'pry'
+require 'sagashi/models/active_record_extension'
 
+require 'pry'
 require 'lingua/stemmer'
 
 module Sagashi
