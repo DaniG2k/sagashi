@@ -13,11 +13,12 @@ module ActiveRecordExtension
     def import
       if all.present?
         all.each_slice(1000) do |batch|
-          # TODO:
-          # Will need to import custom fields eventually
           coll = Sagashi::Collection.new
           batch.each do |obj|
-            coll.docs << Sagashi::Document.new(id: obj.id, body: obj.body)
+            Sagashi.configuration.index_text_fields.each do |text_field|
+              # Index each text field passed in by configuration.
+              coll.docs << Sagashi::Document.new(id: obj.id, body: obj.body)
+            end
           end
           index = Sagashi::InvertedIndex.new(collection: coll)
           index.build

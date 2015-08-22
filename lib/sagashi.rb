@@ -29,7 +29,9 @@ module Sagashi
   end
 
   class Configuration
-    attr_accessor :language, :stopwords
+    attr_accessor :language,
+                  :stopwords,
+                  :index_text_fields
 
     def initialize
       #@app_id = 'default'
@@ -37,6 +39,7 @@ module Sagashi
       # for integration with a Rails app:
       @language = 'en'
       @stopwords = %w(a an and are as at be by for from has he in is it its of on she that the to was were will with)
+      @index_text_fields = Array.new
     end
   end
 end
