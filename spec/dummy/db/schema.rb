@@ -20,4 +20,12 @@ ActiveRecord::Schema.define(version: 20150822092453) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sagashi_tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text     "doc_info"
+    t.string   "term"
+    t.integer  "doc_freq"
+  end
+
 end

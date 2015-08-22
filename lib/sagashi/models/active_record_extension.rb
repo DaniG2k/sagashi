@@ -23,8 +23,6 @@ module ActiveRecordExtension
           index.build
           index.commit!
         end
-      else
-        puts "Nothing to import"
       end
     end
   end
@@ -34,9 +32,10 @@ module ActiveRecordExtension
     after_destroy :destroy_from_inverted_index
   end
 
+  private
   def save_to_inverted_index
   end
-  
+
   def destroy_from_inverted_index
   end
 end

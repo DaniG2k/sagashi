@@ -1,6 +1,7 @@
 module Sagashi
   class InvertedIndex
-    attr_accessor :collection, :iidx
+    attr_accessor :collection
+    attr_reader :iidx
 
     def initialize(params={})
       @collection = params.fetch(:collection, Sagashi::Collection.new)

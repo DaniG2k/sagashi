@@ -29,16 +29,12 @@ module Sagashi
   end
 
   class Configuration
-    attr_accessor :app_id,
-                  :index_file,
-                  :language, 
-                  :stopwords
+    attr_accessor :language, :stopwords
 
     def initialize
-      @app_id = 'default'
+      #@app_id = 'default'
       # Should be more like Rails.root.join('db', 'index.json')
       # for integration with a Rails app:
-      @index_file = "db/#{@app_id}-index.json"
       @language = 'en'
       @stopwords = %w(a an and are as at be by for from has he in is it its of on she that the to was were will with)
     end
