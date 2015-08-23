@@ -57,11 +57,17 @@ module Sagashi
             )
           db_token.save
         end
-        true
+        return true
       rescue Exception => e
         # Do some logging
         raise e
       end
+    end
+
+    def find(str)
+      tokens = Sagashi::Tokenizer.new(str).tokenize
+      @collection.query = str
+      #@collection.bm25
     end
 
     def remove_doc(doc)
@@ -75,12 +81,6 @@ module Sagashi
       # temove the document from the collection.
       @collection.remove_doc(doc)
       @iidx
-    end
-
-    def find(str)
-      tokens = Sagashi::Tokenizer.new(str).tokenize
-      @collection.query = str
-      #@collection.bm25
     end
 
     # Define query_or and query_and methods.

@@ -2,14 +2,6 @@ module ActiveRecordExtension
   extend ActiveSupport::Concern
 
   class_methods do
-    def search(str)
-      query = Sagashi::Tokenizer.new(str).tokenize
-      # Load the inverted index if it's not aready in memory
-
-      # Run .find to search for the keywords.
-      # Use Sagashi::Collection's bm25 method to rank the results.
-    end
-
     def import
       if all.present?
         all.each_slice(1000) do |batch|
@@ -24,6 +16,14 @@ module ActiveRecordExtension
           index.commit
         end
       end
+    end
+
+    def search(str)
+      query_tokens = Sagashi::Tokenizer.new(str).tokenize
+      #query_tokens.each do |token|
+      #  db_token = Sagashi::Token.find_by_term(token)
+      #end
+      # Use Sagashi::Ranker's bm25 method to rank the results.
     end
   end
 
