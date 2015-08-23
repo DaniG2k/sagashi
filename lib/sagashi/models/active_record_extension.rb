@@ -15,10 +15,9 @@ module ActiveRecordExtension
         all.each_slice(1000) do |batch|
           coll = Sagashi::Collection.new
           batch.each do |obj|
-            Sagashi.configuration.index_text_fields.each do |text_field|
-              # Index each text field passed in by configuration.
-              coll.docs << Sagashi::Document.new(id: obj.id, body: obj.body)
-            end
+            h = Hash.new
+            Sagashi.configuration.index_text_fields.each {|field| h[field] = obj[field]}
+            coll.docs << Sagashi::Document.new(:id => obj.id, :text_fields => h)
           end
           index = Sagashi::InvertedIndex.new(collection: coll)
           index.build

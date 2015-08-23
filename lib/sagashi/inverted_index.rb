@@ -5,7 +5,6 @@ module Sagashi
 
     def initialize(params={})
       @collection = params.fetch(:collection, Sagashi::Collection.new)
-      @index_file = Sagashi.configuration.index_file
       @iidx = Hash.new
     end
 
@@ -14,11 +13,11 @@ module Sagashi
       # {:term1=>
       #   {:doc_freq => 21,
       #    :ids => {
-      #      :"1"=>6,
-      #      :"2"=>5,
-      #      :"4"=>5,
-      #      :"5"=>2,
-      #      :"7"=>3}
+      #      :"1"=>[:field1 => 3, :field2 => 3],
+      #      :"2"=>[:field1 => 2, :field2 => 3],
+      #      :"4"=>[:field1 => 3, :field2 => 2],
+      #      :"5"=>[:field2 => 2],
+      #      :"7"=>[:field1 => 3]}
       #   }
       # }
       @collection.docs.each do |doc|
@@ -73,18 +72,6 @@ module Sagashi
         doc_ids.inject(symbol)
       end
     end
-
-    # def commit!
-    #   if File.exist?(@index_file)
-    #     file = File.read @index_file
-    #     # Merge the new tokens
-    #     index = JSON.parse(file).merge(@iidx)
-    #     File.open(@index_file, 'w+') { |f| f.write(index.to_json) }
-    #   else
-    #     # Create & write to file for the first time
-    #     File.open(@index_file, 'w') { |f| f.write(@iidx) }
-    #   end
-    # end
-
+    
   end
 end
