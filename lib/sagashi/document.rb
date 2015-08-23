@@ -11,43 +11,21 @@ module Sagashi
     end
 
     def tokens
-      set_tokens
+      if @tokenized_fields.present?
+        @tokenized_fields
+      else
+        set_tokens
+      end
     end
 
     def length
-      if @tokenized_fields
-        @tokenized_fields.collect {|k,v| v.join(' ').length}.reduce(&:+)
-      else
-        set_tokens.collect {|k,v| v.join(' ').length}.reduce(&:+)
-      end
+      tokens.map {|k,v| v.join(' ').length}.reduce(&:+)
     end
 
     def include?(term)
-      if @tokenized_fields
-        @tokenized_fields.any? {|k,v| v.include?(term)}
-      else
-        set_tokens.any? {|k,v| v.include?(term)}
-      end
+      tokens.any? {|k,v| v.include?(term)}
     end
 
-    def term_freq(term)
-      if @tokenized_fields
-        @tokenized_fields.collect {|k,v| v.count(term)}.reduce(&:+)
-      else
-        set_tokens.collect {|k,v| v.count(term)}.reduce(&:+)
-      end
-    end
-
-    def uniq
-      @uniqe = Hash.new
-      if @tokenized_fields
-        @tokenized_fields.each {|k,v| @uniqe[k] = v.uniq}
-      else
-        set_tokens.each {|k,v| @uniqe[k] = v.uniq}
-      end
-      @uniqe
-    end
-    
     private
     def set_tokens
       # Preserve the field for weighted zone scoring.

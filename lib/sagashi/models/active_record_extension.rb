@@ -21,7 +21,7 @@ module ActiveRecordExtension
           end
           index = Sagashi::InvertedIndex.new(collection: coll)
           index.build
-          index.commit!
+          index.commit
         end
       end
     end

@@ -38,20 +38,10 @@ describe Sagashi::Document do
     expect(@doc.include?("japan")).to be true
   end
 
-  it '#term_freq returns frequency of a string in a document body' do
-    @doc.body = 'In this document here, there are some terms that repeat here.'
-    expect(@doc.term_freq("here")).to eq(2)
-  end
-
   it '#tokens returns the tokens in a document' do
     @doc.body = 'In this document here, there are some terms that repeat here.'
     res = %w(this document here there some term repeat here)
     expect(@doc.tokens).to eq(res)
   end
-
-  it '#uniq returns the uniqe tokens in a document' do
-    @doc.body = 'In this document here, there are some terms that repeat here.'
-    res = %w(this document here there some term repeat)
-    expect(@doc.uniq).to eq(res)
-  end
+  
 end

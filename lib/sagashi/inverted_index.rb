@@ -13,30 +13,55 @@ module Sagashi
       # {:term1=>
       #   {:doc_freq => 21,
       #    :ids => {
-      #      :"1"=>[:field1 => 3, :field2 => 3],
-      #      :"2"=>[:field1 => 2, :field2 => 3],
-      #      :"4"=>[:field1 => 3, :field2 => 2],
-      #      :"5"=>[:field2 => 2],
-      #      :"7"=>[:field1 => 3]}
+      #      "1" => {:field1 => 3, :field2 => 3},
+      #      "2" => {:field1 => 2, :field2 => 3},
+      #      "4" => {:field1 => 3, :field2 => 2},
+      #      "5" => {:field2 => 2},
+      #      "7" => {:field1 => 3}
+      #     }
       #   }
       # }
       @collection.docs.each do |doc|
-        doc.tokens.uniq.each do |token|
-          tf = doc.term_freq(token)
-          if @iidx[token]
-            @iidx[token][:ids] = Hash.new unless @iidx[token][:ids]
-            # Record the frequency of the term in doc
-            @iidx[token][:ids][doc.id] = tf
-            @iidx[token][:doc_freq] += tf
-          else
-            @iidx[token] = {
-              :doc_freq => tf,
-              :ids => { doc.id => tf }
-            }
+        doc.tokens.each do |field, tokens_array|
+          tokens_array.each do |token|
+            tf = tokens_array.count(token)
+            if @iidx[token].present?
+              @iidx[token][:doc_freq] += tf
+              @iidx[token][:ids] = Hash.new unless @iidx[token][:ids]
+              # Record the frequency of the term in doc
+              @iidx[token][:ids][doc.id] = Hash.new unless @iidx[token][:ids][doc.id]
+              @iidx[token][:ids][doc.id][field] = tf
+            else
+              @iidx[token] = {
+                :doc_freq => tf,
+                :ids => {
+                  doc.id => {field =>tf}
+                }
+              }
+            end
           end
         end
       end
       @iidx
+    end
+
+    # Commit each entry in the inverted index object
+    # to a Sagashi::Token in the db.
+    def commit
+      begin
+        @iidx.each do |t|
+          db_token = Sagashi::Token.new(
+            :term => t[0],
+            :doc_freq => t[1][:doc_freq],
+            :doc_info => t[1][:ids]
+            )
+          db_token.save
+        end
+        true
+      rescue Exception => e
+        # Do some logging
+        raise e
+      end
     end
 
     def remove_doc(doc)
