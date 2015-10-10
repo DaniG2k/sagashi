@@ -1,0 +1,15 @@
+<%= content_tag :h1, "Search for Articles" %>
+
+<%= form_tag('/search', method: "get") do %>
+  <%= label_tag(:query, "Search for:") %>
+  <%= text_field_tag(:query) %>
+  <%= submit_tag("Search") %>
+<% end %>
+
+<% if @articles.present? %>
+  <ol>
+  <% @articles.each do |article| %>
+    <li>Title: <%= article.title %>, Body: <%= article.body %></li>
+  <% end %>
+  </ol>
+<% end %>

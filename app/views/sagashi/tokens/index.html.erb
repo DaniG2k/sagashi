@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<%= content_tag :h1, "Listing Tokens" %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Term</th>
+      <th>Document info</th>
+      <th>Document frequency</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tokens.each do |token| %>
+      <tr>
+        <td><%= token.term %></td>
+        <td><%= token.doc_info %></td>
+        <td><%= token.doc_freq %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -63,7 +63,7 @@ module ActiveRecordExtension
           end
         end
       end
-      # Return the matching model ids
+      # Return the matching model objects by looking for the ids.
       where(:id => appears_in_docs)
     end
 

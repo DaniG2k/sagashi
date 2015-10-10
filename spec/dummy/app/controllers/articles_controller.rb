@@ -45,6 +45,13 @@ class ArticlesController < ApplicationController
     redirect_to articles_url, notice: 'Article was successfully destroyed.'
   end
 
+  def search
+    query = params[:query]
+    if query.present?
+      @articles = Article.search(query)
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
