@@ -7,7 +7,7 @@ module Sagashi
       @str2 = str2
     end
 
-    def levenshtein_distance(str1, str2)
+    def levenshtein_distance(str1=@str1, str2=@str2)
       m, n = str1.length, str2.length
       return m if n == 0
       return n if m == 0

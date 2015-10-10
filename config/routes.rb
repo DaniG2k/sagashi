@@ -1,3 +1,3 @@
 Sagashi::Engine.routes.draw do
-  root to: "tokens#index"
+  root "tokens#index"
 end

@@ -5,7 +5,11 @@
   <%= text_field_tag(:query) %>
   <%= submit_tag("Search") %>
 <% end %>
-
+<br>
+<% if @spelling.present? %>
+	Did you mean: <%= @spelling %>?
+<% end %>
+<br>
 <% if @articles.present? %>
   <ol>
   <% @articles.each do |article| %>

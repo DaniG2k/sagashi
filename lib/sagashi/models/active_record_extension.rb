@@ -38,11 +38,7 @@ module ActiveRecordExtension
                 token.save
               end
             end
-            #h = Hash.new
-            # TODO
-            # Implement addition of specific fields to tokens.
-            #Sagashi.configuration.index_text_fields.each {|field| h[field] = obj[field]}
-            #coll.docs << Sagashi::Document.new(:id => obj.id, :text_fields => h)
+            
           end
           #index = Sagashi::InvertedIndex.new(:collection => coll)
           #index.build
