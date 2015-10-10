@@ -9,15 +9,14 @@ module ActiveRecordExtension
           batch.each do |obj|
             # The text fields that the user wants indexed:
             Sagashi.configuration.index_text_fields.each do |field|
+              # Tokenize the strings
               tokenizer = Sagashi::Tokenizer.new(obj.send(field))
               tokenizer.tokenize
               tokenizer.tokens.each do |t|
                 # Make the token if it doesn't already exist
-                tmp = Sagashi::Token.find_by_term(t)
-                if tmp.nil?
+                token = Sagashi::Token.find_by_term(t)
+                if token.nil?
                   token = Sagashi::Token.new(:term => t)
-                else
-                  token = tmp
                 end
                 # Set the document info
                 if token.doc_info.present?
