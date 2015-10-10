@@ -21,7 +21,11 @@ module ActiveRecordExtension
                 # Set the document info
                 if token.doc_info.present?
                   if token.doc_info[field].present?
-                    token.doc_info[field] << obj.id
+                    # Ensure we don't get the same doc id multiple
+                    # times within the array.
+                    unless token.doc_info[field].include?(obj.id)
+                      token.doc_info[field] << obj.id
+                    end
                   else
                     token.doc_info[field] = [obj.id]
                   end
@@ -29,6 +33,8 @@ module ActiveRecordExtension
                   token.doc_info = Hash.new
                   token.doc_info[field] = [obj.id]
                 end
+
+                token.doc_freq += 1
                 token.save
               end
             end
