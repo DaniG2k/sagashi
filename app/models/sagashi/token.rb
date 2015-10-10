@@ -1,6 +1,6 @@
 module Sagashi
   class Token < ActiveRecord::Base
+    validates_presence_of :term
     serialize :doc_info
-    validates :term, presence: true
   end
 end

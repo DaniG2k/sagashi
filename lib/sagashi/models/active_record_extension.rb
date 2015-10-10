@@ -5,15 +5,43 @@ module ActiveRecordExtension
     def import
       if all.present?
         all.each_slice(1000) do |batch|
-          coll = Sagashi::Collection.new
+          #coll = Sagashi::Collection.new
           batch.each do |obj|
-            h = Hash.new
-            Sagashi.configuration.index_text_fields.each {|field| h[field] = obj[field]}
-            coll.docs << Sagashi::Document.new(:id => obj.id, :text_fields => h)
+            # The text fields that the user wants indexed:
+            Sagashi.configuration.index_text_fields.each do |field|
+              tokenizer = Sagashi::Tokenizer.new(obj.send(field))
+              tokenizer.tokenize
+              tokenizer.tokens.each do |t|
+                # Make the token if it doesn't already exist
+                tmp = Sagashi::Token.find_by_term(t)
+                if tmp.nil?
+                  token = Sagashi::Token.new(:term => t)
+                else
+                  token = tmp
+                end
+                # Set the document info
+                if token.doc_info.present?
+                  if token.doc_info[field].present?
+                    token.doc_info[field] << obj.id
+                  else
+                    token.doc_info[field] = [obj.id]
+                  end
+                else
+                  token.doc_info = Hash.new
+                  token.doc_info[field] = [obj.id]
+                end
+                token.save
+              end
+            end
+            #h = Hash.new
+            # TODO
+            # Implement addition of specific fields to tokens.
+            #Sagashi.configuration.index_text_fields.each {|field| h[field] = obj[field]}
+            #coll.docs << Sagashi::Document.new(:id => obj.id, :text_fields => h)
           end
-          index = Sagashi::InvertedIndex.new(collection: coll)
-          index.build
-          index.commit
+          #index = Sagashi::InvertedIndex.new(:collection => coll)
+          #index.build
+          #index.commit
         end
       end
     end
