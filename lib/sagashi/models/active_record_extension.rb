@@ -52,12 +52,21 @@ module ActiveRecordExtension
     end
 
     def search(str)
-      query_tokens = Sagashi::Tokenizer.new(str).tokenize
-      #query_tokens.each do |token|
-      #  db_token = Sagashi::Token.find_by_term(token)
-      #end
-      # Use Sagashi::Ranker's bm25 method to rank the results.
+      query = Sagashi::Tokenizer.new(str)
+      query.tokenize
+      appears_in_docs = Array.new
+      query.tokens.each do |token|
+        retrieved_token = Sagashi::Token.find_by_term(token)
+        unless retrieved_token.nil?
+          retrieved_token.doc_info.each do |key, val|
+            val.each {|id| appears_in_docs << id unless appears_in_docs.include?(id)}
+          end
+        end
+      end
+      # Return the matching model ids
+      where(:id => appears_in_docs)
     end
+
   end
 
   included do
