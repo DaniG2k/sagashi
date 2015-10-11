@@ -47,7 +47,7 @@ module ActiveRecordExtension
 
     def search(str)
       query = Sagashi::Tokenizer.new(str)
-      query.tokenize
+      query.tokenize_query
       appears_in_docs = Array.new
       query.tokens.each do |token|
         retrieved_token = Sagashi::Token.find_by_term(token)
