@@ -13,7 +13,7 @@
 <% if @articles.present? %>
   <ol>
   <% @articles.each do |article| %>
-    <li>Title: <%= article.title %>, Body: <%= article.body %></li>
+    <%= content_tag :li, article.title %>
   <% end %>
   </ol>
 <% end %>

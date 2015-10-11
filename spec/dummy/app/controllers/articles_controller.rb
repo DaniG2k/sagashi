@@ -49,7 +49,7 @@ class ArticlesController < ApplicationController
     query = params[:query]
     if query.present?
       @articles = Article.search(query)
-      @spelling = Sagashi::Token.spelling_suggestions(query)
+      @spelling = nil#Sagashi::Token.spelling_suggestions(query)
     end
   end
 
