@@ -7,7 +7,10 @@ module Sagashi
 
     def initialize(str='')
       @str = str
-      @tokens = Array.new
+      # Tokens are a hash, where the key is the stem
+      # and the val is the original word. This is useful for
+      # spelling suggestions.
+      @tokens = Hash.new
       @stopwords = Sagashi.configuration.stopwords
       # Change this to support multiple languages eventually:
       @lang = Sagashi.configuration.language
@@ -20,12 +23,19 @@ module Sagashi
       regex = /[^\s\p{Alnum}\p{Han}\p{Katakana}\p{Hiragana}\p{Hangul}]/
       jap_punctuation = /[？！：。、]/
       
-      @tokens = @str.gsub(jap_punctuation, ' ')
-                    .gsub(regex,'')
-                    .downcase
-                    .split
-                    .delete_if {|token| @stopwords.include?(token)}
-                    .map {|w| Lingua.stemmer(w, :language => @lang)}
+      @str.gsub(jap_punctuation, ' ')
+          .gsub(regex,'')
+          .downcase
+          .split
+          .delete_if {|token| @stopwords.include?(token)}
+          .each do |word|
+            key = Lingua.stemmer(word, :language => @lang)
+            if @tokens[key].present?
+              @tokens[key] << word unless @tokens[key].include?(word)
+            else
+              @tokens[key] = [word]
+            end
+          end
       @tokens
     end
   end

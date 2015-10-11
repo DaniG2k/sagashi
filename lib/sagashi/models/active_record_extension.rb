@@ -12,12 +12,10 @@ module ActiveRecordExtension
               # Tokenize the strings
               tokenizer = Sagashi::Tokenizer.new(obj.send(field))
               tokenizer.tokenize
-              tokenizer.tokens.each do |t|
+              tokenizer.tokens.each do |t, spelling|
                 # Make the token if it doesn't already exist
                 token = Sagashi::Token.find_by_term(t)
-                if token.nil?
-                  token = Sagashi::Token.new(:term => t)
-                end
+                token = Sagashi::Token.new(:term => t) if token.nil?
                 # Set the document info
                 if token.doc_info.present?
                   if token.doc_info[field].present?
@@ -33,8 +31,8 @@ module ActiveRecordExtension
                   token.doc_info = Hash.new
                   token.doc_info[field] = [obj.id]
                 end
-
                 token.doc_freq += 1
+                token.spelling_suggestions = spelling
                 token.save
               end
             end
