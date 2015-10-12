@@ -18,13 +18,13 @@ module Sagashi
       @jap_punctuation = /[？！：。、]/
     end
 
-    def tokenize_query
+    def tokenize_query!
       # Tokens are an array
-      @tokens = Array.new(basic_tokenization)
+      @tokens = Array.new basic_tokenization
       @tokens
     end
 
-    def tokenize
+    def tokenize_with_spelling_suggestions!
       # Tokens are a hash, where the key is the stem
       # and the val is the original word. This is useful for
       # spelling suggestions.

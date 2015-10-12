@@ -11,7 +11,7 @@ module ActiveRecordExtension
             Sagashi.configuration.index_text_fields.each do |field|
               # Tokenize the strings
               tokenizer = Sagashi::Tokenizer.new(obj.send(field))
-              tokenizer.tokenize
+              tokenizer.tokenize_with_spelling_suggestions!
               tokenizer.tokens.each do |t, spelling|
                 # Make the token if it doesn't already exist
                 token = Sagashi::Token.find_by_term(t)
@@ -47,7 +47,7 @@ module ActiveRecordExtension
 
     def search(str)
       query = Sagashi::Tokenizer.new(str)
-      query.tokenize_query
+      query.tokenize_query!
       appears_in_docs = Array.new
       query.tokens.each do |token|
         retrieved_token = Sagashi::Token.find_by_term(token)
